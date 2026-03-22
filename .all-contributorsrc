@@ -178,6 +178,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "issyuNaN",
+      "name": "issyuNaN",
+      "avatar_url": "https://avatars.githubusercontent.com/u/167730146?v=4",
+      "profile": "https://github.com/issyuNaN",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "commitType": "docs"
