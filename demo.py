@@ -155,7 +155,7 @@ async def process_parallel_candidates(data_list, exp_mode="dev_planner_critic", 
     
     # Process all candidates in parallel (concurrency controlled by processor)
     results = []
-    concurrent_num = 10  # Process all 10 in parallel
+    concurrent_num = min(2, len(data_list))  # Limit concurrency to avoid rate limits
     
     async for result_data in processor.process_queries_batch(
         data_list, max_concurrent=concurrent_num, do_eval=False
@@ -449,7 +449,7 @@ def main():
                 "Number of Candidates",
                 min_value=1,
                 max_value=20,
-                value=10,
+                value=2,
                 key="tab1_num_candidates",
                 help="How many parallel candidates to generate"
             )
