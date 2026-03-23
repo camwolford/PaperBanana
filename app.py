@@ -314,7 +314,7 @@ The Visualizer-Critic loop iterates for $T=3$ rounds."""
 EXAMPLE_CAPTION = "Figure 1: Overview of our PaperBanana framework. Given the source context and communicative intent, we first apply a Linear Planning Phase to retrieve relevant reference examples and synthesize a stylistically optimized description. We then use an Iterative Refinement Loop (consisting of Visualizer and Critic agents) to transform the description into visual output and conduct multi-round refinements to produce the final academic illustration."
 
 PIPELINE_DESCRIPTIONS = {
-    "demo_planner_critic": "Planner \u2192 Visualizer \u2192 Critic \u2192 Visualizer",
+    "demo_planner_critic": "Retriever \u2192 Planner \u2192 Visualizer \u2192 Critic \u2192 Visualizer (no Stylist)",
     "demo_full": "Retriever \u2192 Planner \u2192 Stylist \u2192 Visualizer \u2192 Critic \u2192 Visualizer",
 }
 
@@ -475,7 +475,7 @@ def build_app():
                 </div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center;">
-                <a href="https://arxiv.org/abs/2506.05710" target="_blank" class="header-link-btn">
+                <a href="https://arxiv.org/abs/2601.23265" target="_blank" class="header-link-btn">
                     &#128196; Paper
                 </a>
                 <a href="https://github.com/dwzhu-pku/PaperBanana" target="_blank" class="header-link-btn">
@@ -489,13 +489,17 @@ def build_app():
         # API KEYS ACCORDION
         # ================================================================
         with gr.Accordion("API Keys", open=False):
+            gr.Markdown(
+                "**You do not need both keys.** Fill **at least one**: **OpenRouter** *or* **Google (Gemini)**. "
+                "If both are set, OpenRouter is preferred for automatic routing when available."
+            )
             with gr.Row():
                 openrouter_key_input = gr.Textbox(
-                    label="OpenRouter API Key", type="password", placeholder="sk-or-...",
+                    label="OpenRouter API Key (optional)", type="password", placeholder="sk-or-...",
                     value=get_config_val("api_keys", "openrouter_api_key", "OPENROUTER_API_KEY", ""),
                 )
                 google_key_input = gr.Textbox(
-                    label="Google API Key", type="password", placeholder="AIza...",
+                    label="Google API Key (optional)", type="password", placeholder="AIza...",
                     value=get_config_val("api_keys", "google_api_key", "GOOGLE_API_KEY", ""),
                 )
             gr.Markdown("*Keys are used only for this session and never stored.*")
@@ -509,7 +513,10 @@ def build_app():
                 initialized = reinitialize_clients()
                 if initialized:
                     return f"Clients initialized: {', '.join(initialized)}."
-                return "Warning: no API clients could be initialized. Check your keys."
+                return (
+                    "Warning: no API clients could be initialized. "
+                    "Enter at least one key—OpenRouter or Google (Gemini)."
+                )
 
             apply_keys_btn = gr.Button("Apply Keys", size="sm")
             keys_status = gr.Textbox(visible=False)
@@ -829,7 +836,7 @@ def build_app():
         gr.HTML("""
         <div id="footer-row">
             <a href="https://github.com/dwzhu-pku/PaperBanana" target="_blank">GitHub</a> &middot;
-            <a href="https://arxiv.org/abs/2506.05710" target="_blank">Paper</a><br/>
+            <a href="https://arxiv.org/abs/2601.23265" target="_blank">Paper</a><br/>
             PaperBanana &copy; 2026
         </div>
         """)

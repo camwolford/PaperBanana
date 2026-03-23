@@ -1,4 +1,5 @@
 google-genai
+gradio>=5.0.0
 streamlit
 asyncio
 aiofiles

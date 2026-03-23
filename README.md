@@ -54,7 +54,7 @@ cd PaperBanana
 ### Step2: Configuration
 PaperBanana supports configuring API keys from a YAML configuration file or via environment variables. 
 
-We recommend duplicate the `configs/model_config.template.yaml` file into `configs/model_config.yaml` to externalize all user configurations. This file is ignored by git to keep your api keys and configurations secret. In `model_config.yaml`, remember to fill in the two model names (`defaults.main_model_name` and `defaults.image_gen_model_name`) and set at least one API key under `api_keys` (e.g. `google_api_key` for Gemini models).
+We recommend duplicate the `configs/model_config.template.yaml` file into `configs/model_config.yaml` to externalize all user configurations. This file is ignored by git to keep your api keys and configurations secret. In `model_config.yaml`, remember to fill in the two model names (`defaults.main_model_name` and `defaults.image_gen_model_name`) and set **at least one** API key under `api_keys`—for example only `google_api_key` (Gemini), or only `openrouter_api_key` (OpenRouter). **You do not need both; either one is enough.** If both are configured, OpenRouter is preferred for routing when available.
 
 Note that if you need to generate many candidates simultaneously, you will require an API key that supports high concurrency.
 
@@ -126,11 +126,11 @@ python main.py \
 
 **Experiment Modes:**
 - `vanilla`: Direct generation without planning or refinement
-- `dev_planner`: Planner → Visualizer only
-- `dev_planner_stylist`: Planner → Stylist → Visualizer
-- `dev_planner_critic`: Planner → Visualizer → Critic (multi-round)
+- `dev_planner`: Retriever → Planner → Visualizer
+- `dev_planner_stylist`: Retriever → Planner → Stylist → Visualizer
+- `dev_planner_critic`: Retriever → Planner → Visualizer → Critic (multi-round)
 - `dev_full`: Full pipeline with all agents
-- `demo_planner_critic`: Demo mode (Planner → Visualizer → Critic) without evaluation
+- `demo_planner_critic`: Demo mode (Retriever → Planner → Visualizer → Critic; no Stylist) without evaluation
 - `demo_full`: Demo mode (full pipeline) without evaluation
 
 ### Visualization Tools

@@ -432,7 +432,7 @@ def main():
             )
             
             mode_info = {
-                "demo_planner_critic": "Planner → Visualizer → Critic → Visualizer",
+                "demo_planner_critic": "Retriever → Planner → Visualizer → Critic → Visualizer (no Stylist)",
                 "demo_full": "Retriever → Planner → Stylist → Visualizer → Critic → Visualizer. (The stylist can make the diagram more aesthetically pleasing, but prone to be overly simplied. So we recommend trying both modes and select the best one)"
             }
             st.info(f"**Pipeline:** {mode_info[exp_mode]}")
