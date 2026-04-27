@@ -18,11 +18,8 @@ Vanilla Agent - Directly rendering images based on the method section.
 
 import json
 import os
-from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from google.genai import types
-import base64, io, asyncio
-from PIL import Image
 
 from utils import generation_utils
 from .base_agent import BaseAgent
@@ -56,22 +53,30 @@ class StylistAgent(BaseAgent):
         """
         cfg = self.task_config
         task_name = cfg["task_name"]
-        
+
         input_desc_key = f"target_{task_name}_desc0"
         output_desc_key = f"target_{task_name}_stylist_desc0"
-        
+
         detailed_description = data[input_desc_key]
-        
-        with open(self.exp_config.work_dir / f"style_guides/neurips2025_{task_name}_style_guide.md", "r", encoding="utf-8") as f:
+
+        style_prefix = os.environ.get("PAPERBANANA_STYLE_GUIDE_PREFIX", "neurips2025")
+        with open(
+            self.exp_config.work_dir
+            / f"style_guides/{style_prefix}_{task_name}_style_guide.md",
+            "r",
+            encoding="utf-8",
+        ) as f:
             style_guide = f.read()
-        
+
         user_prompt = f"Detailed Description: {detailed_description}\nStyle Guidelines: {style_guide}\n"
-        raw_content = data['content']
+        raw_content = data["content"]
         if isinstance(raw_content, (dict, list)):
             raw_content = json.dumps(raw_content)
         user_prompt += f"{cfg['context_labels'][0]}: {raw_content}\n"
-        user_prompt += f"{cfg['context_labels'][1]}: {data['visual_intent']}\nYour Output:"
-        
+        user_prompt += (
+            f"{cfg['context_labels'][1]}: {data['visual_intent']}\nYour Output:"
+        )
+
         content_list = [{"type": "text", "text": user_prompt}]
 
         # Generate response
@@ -87,7 +92,7 @@ class StylistAgent(BaseAgent):
             max_attempts=5,
             retry_delay=5,
         )
-        
+
         data[output_desc_key] = response_list[0]
 
         return data
