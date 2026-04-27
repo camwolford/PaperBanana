@@ -17,6 +17,7 @@ Polish Agent - Applies style guidelines to ground truth images
 """
 
 import base64
+import os
 from typing import Dict, Any
 from google.genai import types
 
@@ -61,6 +62,9 @@ class PolishAgent(BaseAgent):
             self.task_config = {
                 "task_name": "diagram",
             }
+        print(
+            f"✨ Polish loading style guide: {self.exp_config.work_dir}/style_guides/{self.style_guide_filename}"
+        )
 
     async def _generate_suggestions(self, gt_image_b64: str, style_guide: str) -> str:
         """Step 1: Generate improvement suggestions based on style guide"""

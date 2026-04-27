@@ -60,12 +60,12 @@ class StylistAgent(BaseAgent):
         detailed_description = data[input_desc_key]
 
         style_prefix = os.environ.get("PAPERBANANA_STYLE_GUIDE_PREFIX", "neurips2025")
-        with open(
+        style_guide_path = (
             self.exp_config.work_dir
-            / f"style_guides/{style_prefix}_{task_name}_style_guide.md",
-            "r",
-            encoding="utf-8",
-        ) as f:
+            / f"style_guides/{style_prefix}_{task_name}_style_guide.md"
+        )
+        print(f"🎨 Stylist loading style guide: {style_guide_path}")
+        with open(style_guide_path, "r", encoding="utf-8") as f:
             style_guide = f.read()
 
         user_prompt = f"Detailed Description: {detailed_description}\nStyle Guidelines: {style_guide}\n"

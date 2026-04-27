@@ -525,11 +525,11 @@ def main():
 
             max_critic_rounds = st.number_input(
                 "Max Critic Rounds",
-                min_value=1,
+                min_value=0,
                 max_value=5,
                 value=3,
                 key="tab1_max_critic_rounds",
-                help="Maximum number of critic refinement iterations",
+                help="Maximum number of critic refinement iterations. Set to 0 to skip the Critic loop entirely and keep the first-round Stylist output (useful when the Critic over-corrects and degrades aesthetics).",
             )
 
             default_model = get_config_val(
@@ -539,9 +539,10 @@ def main():
                 "google/gemini-3.1-pro-preview",
             )
             text_model_presets = [
+                "google/gemini-3.1-flash-lite-preview",  # Stack D — cost-conscious (default)
                 "google/gemini-3.1-pro-preview",  # Stack A/B — frontier scientific reasoning
                 "openai/gpt-5.5",  # Stack C — OpenAI cohesive
-                "gemini-3-flash-preview",  # Cheap fallback
+                "gemini-3-flash-preview",  # Mid-tier fallback
                 "google/gemini-2.5-pro",  # Legacy baseline
             ]
             if default_model in text_model_presets:
