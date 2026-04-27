@@ -19,6 +19,16 @@ git fetch upstream && git rebase upstream/main && git push
 
 ## Running
 
+Upstream ships two demos. **Default to Streamlit** (`demo.py`) — it's the more mature surface and matches user preference. Use Gradio (`app.py`) only when explicitly mirroring the HF Spaces deployment.
+
 ```bash
+# Streamlit (default)
 source .env && streamlit run demo.py
+
+# Gradio (HF Spaces parity only)
+source .env && python app.py
 ```
+
+## Known Upstream Fixes
+
+- `944c055` (2026-04) — OpenRouter refine path was silently dropping the input image, so refinements ran against no image. If a refined output looks identical to the prompt-only baseline, confirm this fix is in your tree (`git log --oneline | grep 944c055`).
